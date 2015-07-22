@@ -25,7 +25,6 @@ namespace Robinhood
         /// </summary>
         /// <param name="username">Username.</param>
         /// <param name="password">Password.</param>
-        /// <returns></returns>
         async public static Task Login(string username, string password)
         {
             if (String.IsNullOrWhiteSpace(username))
@@ -57,6 +56,28 @@ namespace Robinhood
                 {
                     Auth_Token = auth.Token;
                 }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        /// <summary>
+        /// Gets current user's profile.
+        /// </summary>
+        /// <returns>User</returns>
+        async public static Task<User> GetUser()
+        {
+            if (String.IsNullOrEmpty(Auth_Token))
+            {
+                throw new Exception("End-point requires user authentication.");
+            }
+
+            try
+            {
+                var resp = await _Client.GetAsync("user/");
+                return JsonConvert.DeserializeObject(await resp.Content.ReadAsStringAsync(), typeof(User)) as User;
             }
             catch (Exception e)
             {
