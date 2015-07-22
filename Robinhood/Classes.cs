@@ -26,4 +26,22 @@ namespace Robinhood
         [JsonProperty("detail")]
         public string Error { get; set; }
     }
+
+    public class Instrument
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+        [JsonProperty("symbol")]
+        public string Symbol { get; set; }
+        [JsonProperty("bloomberg_unique")]
+        public string BloombergUuid { get; set; }
+        [JsonProperty("tradeable")]
+        public bool Tradeable { get; set; }
+    }
+
+    class InstrumentCollection
+    {
+        [JsonProperty("results")]
+        public List<Instrument> Instruments { get; set; }
+    }
 }
