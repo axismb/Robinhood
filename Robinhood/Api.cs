@@ -46,11 +46,11 @@ namespace Robinhood
 
             try
             {
-                var response = await _Client.PostAsync("api-token-auth", content);
+                var response = await _Client.PostAsync("api-token-auth/", content);
                 Authentication auth = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(Authentication)) as Authentication;
                 if (String.IsNullOrEmpty(auth.Token))
                 {
-                    throw new Exception(auth.Errors.ToString());
+                    throw new Exception(String.Join("\n", auth.Errors));
                 }
                 else
                 {
@@ -77,7 +77,15 @@ namespace Robinhood
             try
             {
                 var resp = await _Client.GetAsync("user/");
-                return JsonConvert.DeserializeObject(await resp.Content.ReadAsStringAsync(), typeof(User)) as User;
+                var user = JsonConvert.DeserializeObject(await resp.Content.ReadAsStringAsync(), typeof(User)) as User;
+
+                if (String.IsNullOrEmpty(user.Error))
+                {
+                    return user;
+                } else
+                {
+                    throw new Exception(user.Error);
+                }
             }
             catch (Exception e)
             {
