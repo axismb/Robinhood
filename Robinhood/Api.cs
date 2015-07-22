@@ -92,5 +92,22 @@ namespace Robinhood
                 throw e;
             }
         }
+
+        /// <summary>
+        /// Gets list of companies.
+        /// </summary>
+        /// <returns>Instruments List</returns>
+        async public static Task<List<Instrument>> GetInstruments()
+        {
+            try
+            {
+                var resp = await _Client.GetAsync("instruments/");
+                var collection = JsonConvert.DeserializeObject(await resp.Content.ReadAsStringAsync(), typeof(InstrumentCollection)) as InstrumentCollection;
+                return collection.Instruments;
+            } catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }
