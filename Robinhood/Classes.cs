@@ -17,12 +17,13 @@ namespace Robinhood
 
     public class User
     {
-        [JsonProperty("guid")]
+        [JsonProperty("id")]
         public string ID { get; set; }
         [JsonProperty("first_name")]
         public string FirstName { get; set; }
         [JsonProperty("last_name")]
         public string LastName { get; set; }
-
+        [JsonProperty("detail")]
+        public string Error { get; set; }
     }
 }
