@@ -94,6 +94,29 @@ namespace Robinhood
         }
 
         /// <summary>
+        /// Gets list of user dividends.
+        /// </summary>
+        /// <returns>List of Dividends.</returns>
+        async public static Task<List<Dividend>> GetDividends()
+        {
+            try
+            {
+                var resp = await _Client.GetAsync("dividends/");
+                var collection = JsonConvert.DeserializeObject(await resp.Content.ReadAsStringAsync(), typeof(ObjectCollection<Dividend>)) as ObjectCollection<Dividend>;
+                if (String.IsNullOrEmpty(collection.Error))
+                {
+                    return collection.Results;
+                } else
+                {
+                    throw new Exception(collection.Error);
+                }
+            } catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        /// <summary>
         /// Gets list of companies.
         /// </summary>
         /// <returns>Instruments List</returns>
@@ -102,8 +125,14 @@ namespace Robinhood
             try
             {
                 var resp = await _Client.GetAsync("instruments/");
-                var collection = JsonConvert.DeserializeObject(await resp.Content.ReadAsStringAsync(), typeof(InstrumentCollection)) as InstrumentCollection;
-                return collection.Instruments;
+                var collection = JsonConvert.DeserializeObject(await resp.Content.ReadAsStringAsync(), typeof(ObjectCollection<Instrument>)) as ObjectCollection<Instrument>;
+                if (String.IsNullOrEmpty(collection.Error))
+                {
+                    return collection.Results;
+                } else
+                {
+                    throw new Exception(collection.Error);
+                }
             } catch (Exception e)
             {
                 throw e;
