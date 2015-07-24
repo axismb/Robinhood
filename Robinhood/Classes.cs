@@ -27,6 +27,28 @@ namespace Robinhood
         public string Error { get; set; }
     }
 
+    public class Dividend
+    {
+        [JsonProperty("account")]
+        public string Account { get; set; }
+        [JsonProperty("url")]
+        public string Url { get; set; }
+        [JsonProperty("instrument")]
+        public string Instrument { get; set; }
+        [JsonProperty("amount")]
+        public decimal Amount { get; set; }
+        [JsonProperty("rate")]
+        public decimal Rate { get; set; }
+        [JsonProperty("withholding")]
+        public decimal Withholding { get; set; }
+        [JsonProperty("record_date")]
+        public DateTime RecordDate { get; set; }
+        [JsonProperty("payable_date")]
+        public DateTime PayableDate { get; set; }
+        [JsonProperty("paid_at")]
+        public DateTime PaidAt { get; set; }
+    }
+
     public class Instrument
     {
         [JsonProperty("name")]
@@ -39,9 +61,11 @@ namespace Robinhood
         public bool Tradeable { get; set; }
     }
 
-    class InstrumentCollection
+    class ObjectCollection<T>
     {
         [JsonProperty("results")]
-        public List<Instrument> Instruments { get; set; }
+        public List<T> Results { get; set; }
+        [JsonProperty("detail")]
+        public string Error { get; set; }
     }
 }
