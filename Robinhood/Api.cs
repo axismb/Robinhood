@@ -117,6 +117,37 @@ namespace Robinhood
         }
 
         /// <summary>
+        /// Gets list of requested quotes.
+        /// </summary>
+        /// <param name="symbols">Symbols of entities to get quotes for</param>
+        /// <returns>List of Quotes.</returns>
+        async public static Task<List<Quote>> GetQuotes(params string[] symbols)
+        {
+            if (symbols.Length == 0)
+            {
+                throw new Exception("At least one symbol required.");
+            }
+
+            try
+            {
+                string queryParams = String.Join(",", symbols);
+                var resp = await _Client.GetAsync("quotes/symbols=" + queryParams);
+                var collection = JsonConvert.DeserializeObject(await resp.Content.ReadAsStringAsync(), typeof(ObjectCollection<Quote>)) as ObjectCollection<Quote>;
+                if (String.IsNullOrEmpty(collection.Error))
+                {
+                    return collection.Results;
+                } else
+                {
+                    throw new Exception(collection.Error);
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        /// <summary>
         /// Gets list of companies.
         /// </summary>
         /// <returns>Instruments List</returns>
