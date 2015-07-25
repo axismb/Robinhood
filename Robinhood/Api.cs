@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace Robinhood
 {
@@ -131,7 +132,8 @@ namespace Robinhood
             try
             {
                 string queryParams = String.Join(",", symbols);
-                var resp = await _Client.GetAsync("quotes/symbols=" + queryParams);
+                var resp = await _Client.GetAsync("quotes/?symbols=" + queryParams);
+                Debug.WriteLine(await resp.Content.ReadAsStringAsync());
                 var collection = JsonConvert.DeserializeObject(await resp.Content.ReadAsStringAsync(), typeof(ObjectCollection<Quote>)) as ObjectCollection<Quote>;
                 if (String.IsNullOrEmpty(collection.Error))
                 {
